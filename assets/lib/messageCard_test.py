@@ -1,14 +1,15 @@
-from lib import messageCard as lib
+from messageCard import *
 import json
+import pytest
 
 def test_MessageCard():
-  m = lib.MessageCard()
+  m = MessageCard()
 
   expected = {
     "@type": "MessageCard",
     "@context": "https://schema.org/extensions",
     "summary": None,
-    "themeColor": lib.Color.DEFAULT,
+    "themeColor": Color.DEFAULT,
     "title": None,
     "text": None,
     "sections": [],
@@ -19,21 +20,21 @@ def test_MessageCard():
   assert actual == expected
 
   actual = m.render(filterEmpty=True)
-  expected = {'themeColor': lib.Color.DEFAULT, '@type': 'MessageCard', '@context': 'https://schema.org/extensions'}
+  expected = {'themeColor': Color.DEFAULT, '@type': 'MessageCard', '@context': 'https://schema.org/extensions'}
 
   assert actual == expected
 
   # Test JSON serialization
   actual = json.loads(m.render(filterEmpty=True, asString=True))
   expected = {
-    'themeColor': lib.Color.DEFAULT,
+    'themeColor': Color.DEFAULT,
     '@type': 'MessageCard',
     '@context': 'https://schema.org/extensions'}
 
   assert actual == expected
 
 def test_Section():
-  s = lib.Section()
+  s = Section()
 
   expected = {
     'title': None,
@@ -56,11 +57,11 @@ def test_Section():
   assert s.render(filterEmpty=True) == {'startGroup': False}
 
 def test_CardWithSection():
-  m = lib.MessageCard(title='Test', text='This is a test', summary='Summary')
-  s = lib.Section(title='Section Title')
+  m = MessageCard(title='Test', text='This is a test', summary='Summary')
+  s = Section(title='Section Title')
   m.addSection(s)
 
   actual = json.loads(m.render(filterEmpty=True, asString=True))
-  expected = {'summary': 'Summary', 'themeColor': lib.Color.DEFAULT, 'title': 'Test', 'text': 'This is a test', 'sections': [{'title': 'Section Title', 'startGroup': False}], '@type': 'MessageCard', '@context': 'https://schema.org/extensions'}
+  expected = {'summary': 'Summary', 'themeColor': Color.DEFAULT, 'title': 'Test', 'text': 'This is a test', 'sections': [{'title': 'Section Title', 'startGroup': False}], '@type': 'MessageCard', '@context': 'https://schema.org/extensions'}
 
   assert actual == expected

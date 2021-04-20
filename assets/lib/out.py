@@ -9,7 +9,7 @@ from messageCard import *
 class Out:
   def __init__(self, *args):
     self.args = args
-    for each arg in args:
+    for arg in args:
       print(f'arg: {arg}')
 
   # def outFunction(self, input:str, dirPath):
