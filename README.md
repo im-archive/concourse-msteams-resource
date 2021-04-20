@@ -1,2 +1,2 @@
 # concourse-msteams-resource
-A Concourse resource for messaging to MS Teams
+A Concourse resource for messaging MS Teams

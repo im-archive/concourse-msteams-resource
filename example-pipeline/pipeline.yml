@@ -1,0 +1,62 @@
+---
+resource_types:
+
+- name: msteams_notifier
+  type: git
+  source:
+    branch: main
+    uri: https://github.com/WTW-IM/concourse-msteams-resource.git
+
+
+resources:
+
+- name: notify_msteams
+  type: msteams_notifier
+  source:
+    test: This is a test
+
+jobs:
+
+- name: test-msteams-resource
+  plan:
+  - get: notify_msteams
+  - task: build-resource
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: radlws/3.7-alpine
+      inputs:
+      - name: notify_msteams
+        path: .
+      # outputs:
+      # - name: msteams-resource
+      run:
+        path: /bin/sh
+        args:
+          - -xce
+          - |
+            mkdir opt
+            mkdir opt/resource
+            cp -r assets/* ./opt/resource/
+            chmod +x ./opt/resource/check
+            chmod +x ./opt/resource/in
+            chmod +x ./opt/resource/out
+            chmod +x ./opt/resource/lib/out.py
+  # - task: test-resource
+  #   config:
+  #     platform: linux
+  #     image_resource:
+  #       type: registry-image
+  #       source: {repository: alpine}
+  #     inputs:
+  #       - name: msteams-resource
+  #   on_success:
+  #     put: msteams-resource
+  #     params:
+  #       alert_type: success
+  #       another_param: testing
+
+
+

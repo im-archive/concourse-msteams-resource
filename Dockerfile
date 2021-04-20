@@ -1,12 +1,10 @@
-FROM python:3.7-alpine
+FROM python:3.7
 
-RUN pip install requests colorama
+ADD requrements*.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# copy resources
-COPY assets/ /opt/resource/
+# install asserts
+ADD assets/ /opt/resource/
+ADD test/ /opt/resource-tests/
 
-# make files executable
-RUN chmod +x /opt/resource/in
-RUN chmod +x /opt/resource/out
-RUN chmod +x /opt/resource/lib/out.py
-RUN chmod +x /opt/resource/check
+RUN /opt/resource-tests/test.sh

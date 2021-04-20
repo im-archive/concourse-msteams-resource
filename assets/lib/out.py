@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import json
 import os
 import sys
@@ -55,6 +55,7 @@ class Out:
 
 if __name__ == "__main__":
   try:
-    out = Out(sys.argv)
+    out = Out(sys.stdin.read(), sys.argv[1:])
   except Exception as ex:
     print(str(ex))
+
