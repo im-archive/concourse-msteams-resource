@@ -11,17 +11,12 @@ ENVIRONMENT = {
   'TEST': 'true',
 }
 
-def cmd(cmd_name, source, args: list = [], version={}, params={}):
+def cmd(cmd_name, data):
   """Wrap command interaction for easier use with python objects."""
 
-  in_json = json.dumps({
-    "source": source,
-    "version": version,
-    "params": params,
-  })
+  data = json.dumps(data)
 
-  command = ['/opt/resource/' + cmd_name] + args
+  command = ['/opt/resource/' + cmd_name, data]
   environment = dict(os.environ, **ENVIRONMENT)
-  output = subprocess.check_output(command, env=environment, stderr=sys.stderr, input=bytes(in_json, 'utf-8'))
-
-  return json.loads(output.decode())
+  result = subprocess.run(command, env=environment, capture_output=True, text=True)
+  return json.loads(result.stdout), result.stderr

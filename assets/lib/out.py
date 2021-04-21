@@ -3,14 +3,51 @@ import json
 import os
 import sys
 
+import logging as log
+import tempfile
+
 from sender import TeamsSender
 from messageCard import *
+from logHelper import *
 
-class Out:
-  def __init__(self, *args):
-    self.args = args
-    for arg in args:
-      print(f'arg: {arg}')
+class MSTeamsResource:
+  def __init__(self, json_data: str):
+    data = json.loads(json_data)
+
+    source = data.get('source', None)
+    params = data.get('params', None)
+
+    # Setup log level
+    if source.get('log_level', None) != None:
+      log.level(source['log_level'])
+
+    # Build Card
+    if params != None:
+      card = buildCard(params)
+
+      if source.get('url', None) != None:
+        self.postCard(source['url'], card)
+
+  def buildCard(self, data):
+    m = MessageCard(
+      summary=data.get('summary', None),
+      themeColor=data.get('themeColor', Color.DEFAULT),
+      title=data.get('title', None),
+      text=data.get('text', None)
+    )
+
+    return m
+
+  def postCard(self, url: str, card: MessageCard):
+    sender = TeamsSender(url)
+    sender.postCard(card)
+    return
+
+    # # We've already redirected STDOUT to STDERR in the bash file ...
+    # print(f'command_name: {command_name}')
+    # print(f'json_data: {json_data}')
+
+
 
   # def outFunction(self, input:str, dirPath):
   #   payload = json.load(input)
@@ -55,7 +92,8 @@ class Out:
 
 if __name__ == "__main__":
   try:
-    out = Out(sys.stdin.read(), sys.argv[1:])
+    # print(MSTeamsResource(sys.stdin.read(), sys.argv[1:]))
+    MSTeamsResource(sys.argv[1:])
   except Exception as ex:
-    print(str(ex))
+    log.error(ex)
 

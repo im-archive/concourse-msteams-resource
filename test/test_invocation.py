@@ -4,13 +4,78 @@ import subprocess
 import pytest
 from helpers import cmd
 
-def test_out(httpbin):
-  """Test OUT action with minimal input."""
+# Generic OUT input
+
+# {
+#   "params": {
+#     "uri": "The webhook URI for MS Teams",
+#     "somethingelse": "Some other param"
+#   },
+#   # Comes from creating an instance of the resource
+#   "source": {
+#     "url": "" # Webhook to MS Teams
+#   }
+# }
+
+def test_OUT(httpbin):
+  """Test action with no params."""
+
   data = {
-    'source': {
-      'uri': httpbin + '/status/200',
+    'params': {
+      # empty on purpose
     },
-    'version': {}
+    'source': {
+      'url': httpbin + '/post'
+    }
   }
-  subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
-  # subprocess.run(['/opt/resource/out', json.dumps(data).encode()], capture_output=True)
+
+  result, debug = cmd('out', data)
+  assert result['version'] == {}
+
+def test_OUT_simple_card(httpbin):
+  """Test action with a simple card."""
+
+  data = {
+    'params': {
+      'summary': 'Card Summary',
+      'title': 'Card Title',
+      'text': 'Card text.',
+    },
+    'source': {
+      'url': httpbin + '/post',
+      'log_level':'debug',
+    }
+  }
+
+  result, debug = cmd('out', data)
+  assert result['version'] == {}
+
+
+# def test_OUT_json(httpbin):
+#   """JSON should be passed as JSON content."""
+
+#   source = {
+#     'uri': httpbin + '/post',
+#     'method': 'POST',
+#     'json': {
+#       'test': 123,
+#     },
+#     'version': {}
+#   }
+
+#   output = cmd('out', source)
+
+#   assert output['json']['test'] == 123
+#   assert output['version'] == {}
+
+def test_CHECK_empty():
+  """CHECK must return an empty response but not nothing."""
+
+  result, debug = cmd('check', {})
+  assert result == []
+
+def test_IN_empty():
+  """IN must return an empty version response but not nothing."""
+
+  result, debug = cmd('in', {})
+  assert result['version'] == {}
