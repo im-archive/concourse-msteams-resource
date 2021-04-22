@@ -65,3 +65,12 @@ def test_CardWithSection():
   expected = {'summary': 'Summary', 'themeColor': Color.DEFAULT, 'title': 'Test', 'text': 'This is a test', 'sections': [{'title': 'Section Title', 'startGroup': False}], '@type': 'MessageCard', '@context': 'https://schema.org/extensions'}
 
   assert actual == expected
+
+def test_DeserializeCard():
+  cardJSON = '{"themeColor": "35495c"}'
+  data = json.loads(cardJSON)
+  m = MessageCard(**data)
+
+  assert m.themeColor == Color.DEFAULT
+
+
