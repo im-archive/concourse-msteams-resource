@@ -43,13 +43,26 @@ def test_OUT_simple_card(httpbin):
     },
     'source': {
       'url': httpbin + '/post',
-      'log_level':'debug',
     }
   }
 
   result, debug = cmd('out', data)
   assert result['version'] == {}
 
+def test_OUT_malformed_card(httpbin):
+  """Test action with a malformed card."""
+
+  data = {
+    'params': {
+    },
+    'source': {
+      'url': httpbin + '/status/404',
+    }
+  }
+
+  result, debug = cmd('out', data)
+  assert result['version'] == {}
+  assert 'ERROR: ' in debug
 
 # def test_OUT_json(httpbin):
 #   """JSON should be passed as JSON content."""

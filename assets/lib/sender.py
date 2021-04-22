@@ -1,18 +1,22 @@
 from logHelper import *
 from messageCard import *
 
+import requests
+
 class TeamsSender():
   def __init__(self, webhook:str):
     self.webhook = webhook
 
   def postCard(self, card: MessageCard):
-
     data = card.render(filterEmpty=True, asString=True)
+    log.info(f'TeamsSender: POSTing card')
+    log.debug(f'URL:\t{self.webhook}')
+    log.debug(f'DATA:\t{data}')
     response = requests.post(url=self.webhook, data=data)
 
     if response.status_code >= 400:
-      log.error(response.text)
+      log.error(f'{response.status_code} - {response.text}')
     else:
-      log.info(f'Successfull POST to MS Teams')
+      log.success(f'TeamsSender: Success')
 
     return

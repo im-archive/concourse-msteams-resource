@@ -11,8 +11,13 @@ from messageCard import *
 from logHelper import *
 
 class MSTeamsResource:
-  def __init__(self, json_data: str):
-    data = json.loads(json_data)
+  def __init__(self, config, sources):
+    log.info('Initializing MS Teams Resource Type: OUT ...')
+    log.debug(f'config: {config}')
+
+    data = json.load(config)
+
+    log.debug(f'Data: {data}')
 
     source = data.get('source', None)
     params = data.get('params', None)
@@ -20,12 +25,15 @@ class MSTeamsResource:
     # Setup log level
     if source.get('log_level', None) != None:
       log.level(source['log_level'])
+      log.debug(f'Log level set to {source["log_level"]}')
 
     # Build Card
     if params != None:
-      card = buildCard(params)
+      log.info('Building card ...')
+      card = self.buildCard(params)
 
       if source.get('url', None) != None:
+        log.info('POSTing card ...')
         self.postCard(source['url'], card)
 
   def buildCard(self, data):
@@ -36,9 +44,13 @@ class MSTeamsResource:
       text=data.get('text', None)
     )
 
+    log.info('Card built')
+    log.debug(m)
+
     return m
 
   def postCard(self, url: str, card: MessageCard):
+    log.info('Initializing sender ...')
     sender = TeamsSender(url)
     sender.postCard(card)
     return
@@ -93,7 +105,9 @@ class MSTeamsResource:
 if __name__ == "__main__":
   try:
     # print(MSTeamsResource(sys.stdin.read(), sys.argv[1:]))
-    MSTeamsResource(sys.argv[1:])
+    MSTeamsResource(sys.stdin, sys.argv[0])
+    print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
     log.error(ex)
+    sys.exit(1)
 
