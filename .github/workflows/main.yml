@@ -35,7 +35,7 @@ jobs:
         with:
           webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
           title: Successfull Package Deploy
-          text:  ${{ stes.publish.outputs.imageName }} was built and published successfully.
+          text:  ${{ steps.publish.outputs.imageName }} was built and published successfully.
           theme_color: 33cd34
 
       - uses: aliencube/microsoft-teams-actions@v0.8.0
@@ -44,7 +44,7 @@ jobs:
         with:
           webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
           title: Package Failed!
-          text:  ${{ stes.publish.outputs.imageName }} failed to build and publish.
+          text:  ${{ steps.publish.outputs.imageName }} failed to build and publish.
           theme_color: d00001
 
       # Delete the old image
