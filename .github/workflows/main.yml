@@ -10,9 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v2
         name: Check out code
+
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
@@ -21,11 +23,17 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       # Delete the old image
       - uses: actions/delete-package-versions@v1
         with:
           package-name: 'msteams-resource'
-      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+
+  success:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: toko-bifrost/ms-teams-deploy-card@master
         if: always()
         with:
           github-token: ${{ github.token }}
