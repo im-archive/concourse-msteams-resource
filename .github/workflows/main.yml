@@ -22,6 +22,6 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
       # Delete the old image
-      - uses: actions/delete-package-versions@1
+      - uses: actions/delete-package-versions@v1
         with:
           package-name: 'msteams-resource'
