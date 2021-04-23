@@ -17,6 +17,7 @@ jobs:
 
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
+        id: publish
         with:
           image: concourse-msteams-resource/msteams-resource
           registry: docker.pkg.github.com
@@ -24,19 +25,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Message result
+      - uses: aliencube/microsoft-teams-actions@v0.8.0
+        name: Send SUCCESS message to MS Teams
+        # ${{ steps.publish.outputs.imageFullName }}
+        # ${{ steps.publish.outputs.imageName }}
+        # ${{ steps.publish.outputs.tags }}
+        if: success() # always()
+        with:
+          webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
+          title: Successfull Package Deploy
+          text:  ${{ stes.publish.outputs.imageName }} was built and published successfully.
+          theme_color: 33cd34
+
+      - uses: aliencube/microsoft-teams-actions@v0.8.0
+        name: Send FAILURE message to MS Teams
+        if: failure()
+        with:
+          webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
+          title: Package Failed!
+          text:  ${{ stes.publish.outputs.imageName }} failed to build and publish.
+          theme_color: d00001
+
       # Delete the old image
       - uses: actions/delete-package-versions@v1
         with:
           package-name: 'msteams-resource'
-
-  success:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: toko-bifrost/ms-teams-deploy-card@master
-        if: always()
-        with:
-          github-token: ${{ github.token }}
-          webhook-uri: ${{ secrets.MS_TEAMS_TEST_URL }}
-          card-layout-exit: cozy
-          show-on-failure: true
