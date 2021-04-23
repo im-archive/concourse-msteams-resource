@@ -25,8 +25,8 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
-          image: msteams-resource
-          registry: ghcr.io
+          image: wtw-im/concourse-msteams-resource/msteams-resource
+          registry: docker.pkg.github.com
           dockerfile: Dockerfile
-          username: ${{secrets.GHCR_USERNAME}}
-          password: ${{secrets.GHCR_TOKEN}}
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
