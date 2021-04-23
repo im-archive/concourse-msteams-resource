@@ -19,9 +19,16 @@ jobs:
           image: concourse-msteams-resource/msteams-resource
           registry: docker.pkg.github.com
           dockerfile: Dockerfile
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       # Delete the old image
       - uses: actions/delete-package-versions@v1
         with:
           package-name: 'msteams-resource'
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.MS_TEAMS_TEST_URL }}
+          card-layout-exit: cozy
+          show-on-failure: true
