@@ -21,3 +21,7 @@ jobs:
           dockerfile: Dockerfile
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
+      # Delete the old image
+      - uses: actions/delete-package-versions@1
+        with:
+          package-name: 'msteams-resource'
