@@ -20,6 +20,7 @@ jobs:
         id: publish
         with:
           image: concourse-msteams-resource/msteams-resource
+          tags: latest
           registry: docker.pkg.github.com
           dockerfile: Dockerfile
           username: ${{ github.actor }}
