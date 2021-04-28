@@ -19,8 +19,8 @@ jobs:
         name: Build & push Docker image
         id: publish
         with:
-          #image: concourse-msteams-resource/msteams-resource
-          image: msteams-resource
+          image: concourse-msteams-resource/msteams-resource
+          #image: msteams-resource
           tags: latest
           #registry: docker.pkg.github.com
           registry: ghcr.io
