@@ -19,12 +19,16 @@ jobs:
         name: Build & push Docker image
         id: publish
         with:
-          image: concourse-msteams-resource/msteams-resource
+          #image: concourse-msteams-resource/msteams-resource
+          image: msteams-resource
           tags: latest
-          registry: docker.pkg.github.com
+          #registry: docker.pkg.github.com
+          registry: ghcr.io
           dockerfile: Dockerfile
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          #username: ${{ github.actor }}
+          username: ${{ secrets.GHCR_USERNAME }}
+          #password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       # Message result
       - uses: aliencube/microsoft-teams-actions@v0.8.0
