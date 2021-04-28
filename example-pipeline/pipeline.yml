@@ -4,10 +4,10 @@ resource_types:
 - name: msteams-notifier
   type: registry-image
   source:
-    repository: docker.pkg.github.com/wtw-im/concourse-msteams-resource/msteams-resource
+    repository: ghcr.io/wtw-im/concourse-msteams-resource/msteams-resource
     tag: latest
-    username: ((github.token))
-    password: x-oauth-basic
+    username: im-pipeline-bot
+    password: ((github.concourse-msteams-resource))
 
 resources:
 
