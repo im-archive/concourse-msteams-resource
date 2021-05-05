@@ -19,5 +19,4 @@ def cmd(cmd_name, data):
   command = f'/opt/resource/{cmd_name}'
   environment = dict(os.environ, **ENVIRONMENT)
   result = subprocess.run(command, input=data, env=environment, capture_output=True, text=True)
-  # print(f'*** STDOUT: **{result.stdout}**', file=sys.stderr)
   return json.loads(result.stdout), result.stderr
