@@ -1,3 +1,4 @@
 requests
 colorama
 multipledispatch
+html2markdown

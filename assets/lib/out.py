@@ -35,19 +35,24 @@ class MSTeamsResource:
         self.postCard(source['url'], card)
 
   def buildCard(self, data):
-    log.info('Building card ... ')
+    log.info('Detecting card sources ... ')
 
-    m = MessageCard(
-      summary=data.get('summary', None),
-      themeColor=data.get('themeColor', Color.DEFAULT),
-      title=data.get('title', None),
-      text=data.get('text', None)
-    )
+    if 'messageCard' in data.get('messageCard', None):
+      log.info('Card source: JSON')
+      m = data['messageCard']
+      return m
 
-    log.info('Card built')
-    log.debug(m.render(asString=True, filterEmpty=True))
-
-    return m
+    else:
+      log.info('Card source: params')
+      m = MessageCard(
+        summary=data.get('summary', None),
+        themeColor=data.get('themeColor', Color.DEFAULT),
+        title=data.get('title', None),
+        text=data.get('text', None)
+      )
+      log.info('Card built')
+      log.debug(m.render(asString=True, filterEmpty=True))
+      return m.render(filterEmpty)
 
   def postCard(self, url: str, card: MessageCard):
     sender = TeamsSender(url)

@@ -3,6 +3,7 @@
 import json
 import inspect
 from typing import TypedDict, List
+# import html2markdown
 
 class Fact(TypedDict):
   name: str
@@ -26,6 +27,7 @@ class Target(TypedDict):
   os: Os
   uri: str
 
+# TODO: In order for potentialActions to render, they need to have a @type property set.
 class ActionOpenUri(TypedDict):
   name: str
   targets: List[Target]
@@ -60,9 +62,6 @@ class Renderable:
         elif isinstance(data[key], (int, float, bool)):
           # print('int/float/bool')
           c[key] = data[key]
-        # else:
-        #   print(f'unhandled:')
-        #   print(data[key])
       data = c
 
     if asString == True:
@@ -94,7 +93,7 @@ class Section(Renderable):
     text: str = None,
     facts: Facts = None,
     images: Images = None,
-    potentialAction: list = []):
+    potentialAction: List[TypedDict] = []):
 
     self.__dict__ = locals()
 
@@ -114,7 +113,7 @@ class MessageCard(Renderable):
     title: str = None,
     text: str = None,
     sections: Sections = [],
-    potentialAction: list = []):
+    potentialAction: List[TypedDict] = []):
 
     locals()["@type"] = 'MessageCard'
     locals()["@context"] = 'https://schema.org/extensions'
