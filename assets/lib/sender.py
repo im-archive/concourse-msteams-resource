@@ -15,8 +15,8 @@ class TeamsSender():
   def postCardJSON(self, card: str):
     log.info(f'TeamsSender: POSTing card')
     log.debug(f'URL:\t{self.webhook}')
-    log.debug(f'DATA:\t{data}')
-    response = requests.post(url=self.webhook, data=data)
+    log.debug(f'DATA:\t{card}')
+    response = requests.post(url=self.webhook, data=card)
 
     if response.status_code >= 400:
       log.error(f'{response.status_code} - {response.text}')
