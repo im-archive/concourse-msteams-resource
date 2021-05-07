@@ -50,5 +50,7 @@ jobs:
 
       # Delete the old image
       - uses: actions/delete-package-versions@v1
+        name: Delete older version of package
+        if: success()
         with:
           package-name: 'msteams-resource'

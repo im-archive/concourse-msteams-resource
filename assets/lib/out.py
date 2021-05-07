@@ -33,6 +33,8 @@ class MSTeamsResource:
       if source.get('url', None) != None:
         log.info('POSTing card ...')
         self.postCard(source['url'], card)
+      else:
+        log.warn(f'No MS TEAMS URI was supplied. No card will be POSTed.')
 
   def buildCard(self, data):
     log.info('Detecting card sources ... ')
