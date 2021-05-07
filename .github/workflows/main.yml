@@ -48,9 +48,9 @@ jobs:
           text:  Failed to build/publish msteams-resource.
           theme_color: d00001
 
-      # Delete the old image
-      - uses: actions/delete-package-versions@v1
-        name: Delete older version of package
-        if: success()
-        with:
-          package-name: 'msteams-resource'
+      # # Delete the old image
+      # - uses: actions/delete-package-versions@v1
+      #   name: Delete older version of package
+      #   if: success()
+      #   with:
+      #     package-name: 'msteams-resource'
