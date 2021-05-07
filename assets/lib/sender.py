@@ -9,6 +9,10 @@ class TeamsSender():
 
   def postCard(self, card: MessageCard):
     data = card.render(filterEmpty=True, asString=True)
+    postCardJSON(data)
+    return
+
+  def postCardJSON(self, card: str):
     log.info(f'TeamsSender: POSTing card')
     log.debug(f'URL:\t{self.webhook}')
     log.debug(f'DATA:\t{data}')
