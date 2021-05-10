@@ -107,7 +107,7 @@ class MSTeamsResource:
 
 if __name__ == "__main__":
   try:
-    print(f'sys.argv[0]: {sys,argv[0]}')
+    print(f'sys.argv[0]: {sys.argv[0]}')
     MSTeamsResource(sys.stdin, sys.argv[0])
     print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
