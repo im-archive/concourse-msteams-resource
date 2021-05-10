@@ -9,6 +9,7 @@ import tempfile
 from sender import TeamsSender
 from messageCard import *
 from logHelper import *
+from parseHTML import *
 
 class MSTeamsResource:
   def __init__(self, config, sources):
@@ -28,18 +29,22 @@ class MSTeamsResource:
 
     # Build Card
     if params != None:
-      card = self.buildCard(params)
+      cardString = self.buildCard(params)
 
       if source.get('url', None) != None:
         log.info('POSTing card ...')
-        self.postCard(source['url'], card)
+        self.postCard(source['url'], cardString)
       else:
         log.warn(f'No MS TEAMS URI was supplied. No card will be POSTed.')
 
   def buildCard(self, data):
     log.info('Detecting card sources ... ')
 
-    if 'messageCard' in data:
+    if 'template' in data:
+      log.info('Card source: Template')
+      return self.buildTemplate(data)
+
+    elif 'messageCard' in data:
       log.info('Card source: JSON')
       m = json.loads(data['messageCard'])
       return json.dumps(m)
@@ -54,6 +59,29 @@ class MSTeamsResource:
       )
       log.info('Card built')
       return m.render(asString=True, filterEmpty=True)
+
+  def buildTemplate(self, data):
+    template = json.dumps(json.loads(data['template']))
+    vs = data.get('vars',{})
+    for v in vs.keys():
+      if 'file' in vs[v]:
+        f = open(vs[v]['file'])
+        value = f.read()
+        if 'decodeHTML' in vs[v] and vs[v]['decodeHTML'] == True:
+          value = parseHTML.decode(value)
+          log.debug(f'Decoded: {value}')
+
+        if 'parseHTML' in vs[v] and vs[v]['parseHTML'] == True:
+          value = parseHTML.asMarkdown(value)
+          log.debug(f'Markdown: {value}')
+
+      if 'value' in vs[v]:
+        value = vs[v]
+        log.debug(f'Value: {value}')
+
+      template = template.replace(f'{{{v}}}', value)
+
+    return template
 
   def postCard(self, url: str, card: str):
     sender = TeamsSender(url)
