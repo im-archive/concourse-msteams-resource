@@ -41,7 +41,7 @@ class MSTeamsResource:
 
     if 'messageCard' in data:
       log.info('Card source: JSON')
-      m = data['messageCard']
+      m = json.loads(data['messageCard'])
       return json.dumps(m)
 
     else:
@@ -57,8 +57,7 @@ class MSTeamsResource:
 
   def postCard(self, url: str, card: str):
     sender = TeamsSender(url)
-    sender.postCardJSON(card)
-    return
+    return sender.postCardJSON(card)
 
 if __name__ == "__main__":
   try:
