@@ -79,7 +79,7 @@ class MSTeamsResource:
 
     for v in vs.keys():
       if 'file' in vs[v]:
-        f = open(f'{self.pwd}/{vs[v]['file']}')
+        f = open(f'{self.pwd}/{vs[v]["file"]}')
         value = f.read()
         if 'decodeHTML' in vs[v] and vs[v]['decodeHTML'] == True:
           value = parseHTML.decode(value)
