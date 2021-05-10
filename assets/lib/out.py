@@ -67,12 +67,17 @@ class MSTeamsResource:
   def buildTemplate(self, data):
     template = json.dumps(json.loads(data['template']))
     vs = data.get('vars',{})
+
+    code, ls = self.__proc('ls -la')
+    log.debug(f'ls -la')
+    log.debug(ls)
+
+    code, ls = self.__proc('pwd')
+    log.debug(f'pwd')
+    log.debug(ls)
+
     for v in vs.keys():
       if 'file' in vs[v]:
-        code, ls = self._proc('ls -la')
-        log.debug(f'ls -la')
-        log.debug(ls)
-
         f = open(vs[v]['file'])
         value = f.read()
         if 'decodeHTML' in vs[v] and vs[v]['decodeHTML'] == True:
