@@ -64,17 +64,17 @@ class MSTeamsResource:
 
   def __proc(self, cmd):
     proc = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return proc.returncode, proc.stdout, proc.stderr.decode('utf-8')
+    return proc.stdout
 
   def buildTemplate(self, data):
     template = json.dumps(json.loads(data['template']))
     vs = data.get('vars',{})
 
-    code, ls = self.__proc('ls -la')
+    ls = self.__proc('ls -la')
     log.debug(f'ls -la')
     log.debug(ls)
 
-    code, ls = self.__proc('pwd')
+    ls = self.__proc('pwd')
     log.debug(f'pwd')
     log.debug(ls)
 
