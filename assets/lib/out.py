@@ -60,11 +60,19 @@ class MSTeamsResource:
       log.info('Card built')
       return m.render(asString=True, filterEmpty=True)
 
+  def __proc(self, cmd):
+    proc = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return proc.returncode, proc.stdout, proc.stderr.decode('utf-8')
+
   def buildTemplate(self, data):
     template = json.dumps(json.loads(data['template']))
     vs = data.get('vars',{})
     for v in vs.keys():
       if 'file' in vs[v]:
+        code, ls = self._proc('ls -la')
+        log.debug(f'ls -la')
+        log.debug(ls)
+
         f = open(vs[v]['file'])
         value = f.read()
         if 'decodeHTML' in vs[v] and vs[v]['decodeHTML'] == True:
