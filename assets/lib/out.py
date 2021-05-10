@@ -39,7 +39,7 @@ class MSTeamsResource:
   def buildCard(self, data):
     log.info('Detecting card sources ... ')
 
-    if 'messageCard' in data.get('messageCard', ''):
+    if 'messageCard' in data:
       log.info('Card source: JSON')
       m = data['messageCard']
       return json.dumps(m)
