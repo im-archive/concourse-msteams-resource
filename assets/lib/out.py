@@ -103,10 +103,7 @@ class MSTeamsResource:
 
 if __name__ == "__main__":
   try:
-    # print(MSTeamsResource(sys.stdin.read(), sys.argv[1:]))
-    log.debug(f'** ARGV:')
-    log.debug(sys.argv[1:])
-    MSTeamsResource(sys.stdin, sys.argv[0])
+    MSTeamsResource(sys.stdin, sys.argv[1])
     print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
     log.error(ex)
