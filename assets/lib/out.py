@@ -14,8 +14,11 @@ from logHelper import *
 from parseHTML import *
 
 class MSTeamsResource:
-  def __init__(self, config, sources):
+  def __init__(self, config, pwd):
     log.info('Initializing MS Teams Resource Type: OUT ...')
+    log.debug(f'Working Directory: {pwd}')
+
+    self.pwd = pwd
 
     data = json.load(config)
 
@@ -70,17 +73,13 @@ class MSTeamsResource:
     template = json.dumps(json.loads(data['template']))
     vs = data.get('vars',{})
 
-    ls = self.__proc('ls -la')
-    log.debug(f'ls -la')
-    log.debug(ls)
-
-    ls = self.__proc('pwd')
-    log.debug(f'pwd')
+    ls = self.__proc(f'cd {self.pwd} && ls -la')
+    log.debug(f'cd {self.pwd} && ls -la')
     log.debug(ls)
 
     for v in vs.keys():
       if 'file' in vs[v]:
-        f = open(vs[v]['file'])
+        f = open(f'{self.pwd}/{vs[v]['file']}')
         value = f.read()
         if 'decodeHTML' in vs[v] and vs[v]['decodeHTML'] == True:
           value = parseHTML.decode(value)
