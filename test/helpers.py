@@ -16,7 +16,7 @@ def cmd(cmd_name, data):
 
   data = json.dumps(data)
 
-  command = f'/opt/resource/{cmd_name}'
+  command = [f'/opt/resource/{cmd_name}', '/tmp/build/put']
   environment = dict(os.environ, **ENVIRONMENT)
   result = subprocess.run(command, input=data, env=environment, capture_output=True, text=True)
   return json.loads(result.stdout), result.stderr
