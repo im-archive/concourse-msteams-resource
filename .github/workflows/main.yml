@@ -35,7 +35,8 @@ jobs:
         if: success() # always()
         with:
           webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
-          title: Successfull Package Deploy
+          summary: Successful build of Concourse-MSTeams-Resource
+          title: Successful build of Concourse-MSTeams-Resource
           text:  ${{ steps.publish.outputs.imageName }} was built and published successfully.
           theme_color: 33cd34
 
@@ -44,8 +45,9 @@ jobs:
         if: failure()
         with:
           webhook_uri: ${{ secrets.MS_TEAMS_TEST_URL }}
-          title: Package Failed!
-          text:  Failed to build/publish msteams-resource.
+          summary: Failed build of Concourse-MSTeams-Resource
+          title: Failed build of Concourse-MSTeams-Resource
+          text:  Failed to build concourse-msteams-resource.
           theme_color: d00001
 
       # # Delete the old image
