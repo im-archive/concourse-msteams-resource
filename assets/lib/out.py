@@ -14,14 +14,10 @@ from logHelper import *
 from parseHTML import *
 
 class MSTeamsResource:
-  def __init__(self, config, *args):
+  def __init__(self, config, pwd):
     log.info('Initializing MS Teams Resource Type: OUT ...')
-    log.debug(f'Additional Args: {args}')
-
-    self.pwd = args[0]
-
+    self.pwd = pwd
     log.debug(f'Working Directory: {self.pwd}')
-
 
     data = json.load(config)
 
@@ -107,7 +103,8 @@ class MSTeamsResource:
 if __name__ == "__main__":
   try:
     log.debug(f'sys.argv: {sys.argv}')
-    MSTeamsResource(sys.stdin, sys.argv[1:])
+    log.debug(f'sys.argv[1]: {sys.argv[1]}')
+    MSTeamsResource(sys.stdin, sys.argv[1])
     print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
     log.error(ex)
