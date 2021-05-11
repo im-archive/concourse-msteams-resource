@@ -1,0 +1,63 @@
+---
+resource_types:
+- name: rss
+  type: registry-image
+  source:
+    repository: suhlig/concourse-rss-resource
+    tag: latest
+
+- name: msteams-notifier
+  type: registry-image
+  source:
+    repository: ghcr.io/wtw-im/concourse-msteams-resource/msteams-resource
+    tag: latest
+    debug: true
+
+resources:
+
+- name: notify-msteams
+  type: msteams-notifier
+  source:
+    url: ((msteams.test_url))
+    log_level: debug
+
+- name: rss-hashi
+  type: rss
+  icon: rss
+  source:
+    url: https://status.hashicorp.com/history.rss
+
+jobs:
+- name: read-rss
+  plan:
+    - get: rss-hashi
+      trigger: true
+
+    - put: notify-msteams
+      params:
+        template: |
+          {
+            "@type": "MessageCard",
+            "@context": "https://schema.org/extensions",
+            "summary": "{title}",
+            "themeColor": "35495c",
+            "title": "Hashicorp: {title}",
+            "text": "{text}",
+            "potentialAction": [{
+              "@type": "OpenUri",
+              "name": "View",
+              "targets": [{
+                "os": "default",
+                "uri": "{link}"
+              }]
+            }]
+          }
+        vars:
+          title:
+            file: rss-hashi/title
+          text:
+            file: rss-hashi/description
+            parseHTML: true
+            decodeHTML: true
+          link:
+            file: rss-hashi/link

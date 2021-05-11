@@ -64,17 +64,9 @@ class MSTeamsResource:
       log.info('Card built')
       return m.render(asString=True, filterEmpty=True)
 
-  def __proc(self, cmd):
-    proc = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return proc.stdout
-
   def buildTemplate(self, data):
     template = json.dumps(json.loads(data['template']))
     vs = data.get('vars',{})
-
-    ls = self.__proc(f'cd {self.pwd} && ls -la')
-    log.debug(f'cd {self.pwd} && ls -la')
-    log.debug(ls)
 
     for v in vs.keys():
       if 'file' in vs[v]:
@@ -102,8 +94,6 @@ class MSTeamsResource:
 
 if __name__ == "__main__":
   try:
-    log.debug(f'sys.argv: {sys.argv}')
-    log.debug(f'sys.argv[1]: {sys.argv[1]}')
     MSTeamsResource(sys.stdin, sys.argv[1])
     print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
