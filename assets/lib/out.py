@@ -20,9 +20,8 @@ class MSTeamsResource:
 
     self.pwd = args[0]
 
-    # log.debug(f'Working Directory: {pwd}')
+    log.debug(f'Working Directory: {self.pwd}')
 
-    # self.pwd = pwd
 
     data = json.load(config)
 
@@ -108,7 +107,7 @@ class MSTeamsResource:
 if __name__ == "__main__":
   try:
     log.debug(f'sys.argv: {sys.argv}')
-    MSTeamsResource(sys.stdin, sys.argv)
+    MSTeamsResource(sys.stdin, sys.argv[1:])
     print(json.dumps({'version':{}}), file=sys.stdout)
   except Exception as ex:
     log.error(ex)
