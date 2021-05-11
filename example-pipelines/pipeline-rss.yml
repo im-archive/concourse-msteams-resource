@@ -17,6 +17,7 @@ resources:
 
 - name: notify-msteams
   type: msteams-notifier
+  icon: message
   source:
     url: ((msteams.test_url))
     log_level: debug
